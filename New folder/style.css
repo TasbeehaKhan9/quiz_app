@@ -32,5 +32,28 @@ z-index: 1;
 .first-head{
    
     text-decoration:dotted;
-    
+
+}
+
+
+.sumbit-btn{
+    font-size: 20px;
+    width: 50%;
+    border: none;
+    background-color:#1c5cca;
+    color: white;
+    font-weight: 600;
+    border-radius:20px ;
+     transition: background-color 0.4s ease, transform 0.3s ease;
+}
+
+
+.sumbit-btn:hover{
+    background-color: #0c2044;
+    transform: scale(1.05);
+}
+
+
+.maindiv{
+    background-image: url(https://quwa.org/wp-content/uploads/2025/07/JF-17C-Block-3-at-RIAT-2025.jpg);
 }
