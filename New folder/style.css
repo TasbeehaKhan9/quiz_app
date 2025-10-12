@@ -1,0 +1,36 @@
+*{
+   box-sizing:border-box;
+   padding: 0;
+   margin: 0
+
+}
+
+
+.imagediv {
+  background-image: url("https://pop.h-cdn.co/assets/16/26/640x480/sd-aspect-1467327620-gettyimages-457883122.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+
+
+
+.enroll-div{
+    border-radius: 30px;
+    border: 4px solid rgb(255, 255, 255);
+    background-color:rgba(224, 161, 0, 0.6);
+;
+ 
+    position: relative; 
+z-index: 1;
+}
+
+
+.first-head{
+   
+    text-decoration:dotted;
+    
+}
