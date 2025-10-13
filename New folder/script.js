@@ -8,6 +8,15 @@ let roll = document.getElementById("roll").value.trim();
 let cnic = document.getElementById("cnic").value.trim();
 let message = document.getElementById("message");
 
+
+localStorage.setItem("name",name);
+localStorage.setItem("roll",roll);
+localStorage.setItem("cnic",cnic);
+
+
+window.location.href= "quiz.html";
+
+
    message.textContent = "";
     message.style.color = "red";
 
