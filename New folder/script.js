@@ -14,7 +14,7 @@ localStorage.setItem("roll",roll);
 localStorage.setItem("cnic",cnic);
 
 
-window.location.href= "quiz.html";
+
 
 
    message.textContent = "";
@@ -46,9 +46,10 @@ if (cnic.length !== 13){
   document.getElementById("cnic").value = "";
 
 
-  setTimeout(function(){
+setTimeout(function () {
     message.textContent = "";
-  },1000);
+    window.location.href = "quiz.html";
+  }, 1000);
 
 
 setTimeout(function(){

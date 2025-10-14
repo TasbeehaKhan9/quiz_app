@@ -16,7 +16,17 @@ integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJ
   
 
 
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
 
+  <div class="card p-4 shadow rounded" style="width: 600px;">
+    <h3 class="text-center mb-4">Welcome to the Quiz 🎯</h3>
+
+    <div id="questionBox" class="mb-3 fw-bold fs-5"></div>
+
+    <div id="optionsBox" class="list-group mb-3"></div>
+
+    <button id="nextBtn" class="btn btn-primary w-100">Next ➡️</button>
+  </div>
 
 
 </body>
@@ -24,7 +34,73 @@ integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJ
 
 
 
+const quizData = [
+  {
+    question: "What is the capital of Pakistan?",
+    options: ["Karachi", "Lahore", "Islamabad", "Quetta"],
+    answer: "Islamabad"
+  },
+  {
+    question: "HTML stands for?",
+    options: ["Hyper Text Markup Language", "High Text Machine Language", "Home Tool Markup Language", "Hyperlinks Text Markup Language"],
+    answer: "Hyper Text Markup Language"
+  },
+  {
+    question: "Which language is used for styling web pages?",
+    options: ["HTML", "Python", "CSS", "Java"],
+    answer: "CSS"
+  }
+];
 
+let index = 0;
+let score = 0;
+
+const questionBox = document.getElementById("questionBox");
+const optionsBox = document.getElementById("optionsBox");
+const nextBtn = document.getElementById("nextBtn");
+
+function loadQuestion() {
+  const current = quizData[index];
+  questionBox.textContent = current.question;
+  optionsBox.innerHTML = "";
+
+  current.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.className = "list-group-item list-group-item-action";
+    btn.onclick = () => selectOption(btn, current.answer);
+    optionsBox.appendChild(btn);
+  });
+}
+
+function selectOption(selectedBtn, correctAnswer) {
+  const buttons = optionsBox.querySelectorAll("button");
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (selectedBtn.textContent === correctAnswer) {
+    selectedBtn.classList.add("list-group-item-success");
+    score++;
+  } else {
+    selectedBtn.classList.add("list-group-item-danger");
+  }
+}
+
+nextBtn.onclick = () => {
+  index++;
+  if (index < quizData.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+};
+
+function showResult() {
+  questionBox.textContent = `Quiz Completed! 🎉`;
+  optionsBox.innerHTML = `<h4>Your Score: ${score}/${quizData.length}</h4>`;
+  nextBtn.style.display = "none";
+}
+
+loadQuestion();
     
   </script>
 </html>
