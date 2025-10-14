@@ -1,106 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pakistan Air Force</title>
+  <title>Modern Quiz App</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #23364b, #1b263b, #275080);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    .quiz-card {
+      background: rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      padding: 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 10px;
+      background: rgba(207, 199, 199, 0.3);
+      border-radius: 5px;
+      margin-right: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #aa9100;
+      transition: 0.5s ease;
+    }
+
+    .quiz-timer {
+      font-weight: 600;
+    }
+
+    .quiz-question h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .quiz-options button {
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255,255,255,0.9);
+      color: #1c1a5e;
+      transition: 0.3s ease;
+    }
+
+    .quiz-options button:hover {
+      transform: scale(1.05);
+      background: #ffb84d;
+      color: #1c1a5e;
+    }
+
+    .quiz-options button.correct {
+      background: #28a745 !important;
+      color: #fff;
+    }
+
+    .quiz-options button.wrong {
+      background: #dc3545 !important;
+      color: #fff;
+    }
+
+    #next-btn {
+      align-self: flex-end;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #ffd700;
+      color: #1c1a5e;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
+      transition: 0.3s ease;
+    }
+
+    #next-btn:hover {
+      transform: scale(1.05);
+    }
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-
-<link rel="shortcut icon" href="logo.png" type="PAF logo">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <body>
-  
 
+  <div class="quiz-card">
+    <div class="quiz-header">
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+      <div class="quiz-timer" id="timer">02:00  <i class="fa-regular fa-clock"></i></div>
+    </div>
 
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="quiz-question">
+      <h2 id="question-text">Select any One Option</h2>
+    </div>
 
-  <div class="card p-4 shadow rounded" style="width: 600px;">
-    <h3 class="text-center mb-4">Welcome to the Quiz 🎯</h3>
+    <div class="quiz-options" id="options">
+      <!-- Options injected here -->
+    </div>
 
-    <div id="questionBox" class="mb-3 fw-bold fs-5"></div>
-
-    <div id="optionsBox" class="list-group mb-3"></div>
-
-    <button id="nextBtn" class="btn btn-primary w-100">Next ➡️</button>
+    <button id="next-btn">Next ➔</button>
   </div>
 
+<script>
 
-</body>
-  <script >
-
-
-
-const quizData = [
-  {
-    question: "What is the capital of Pakistan?",
-    options: ["Karachi", "Lahore", "Islamabad", "Quetta"],
-    answer: "Islamabad"
-  },
-  {
-    question: "HTML stands for?",
-    options: ["Hyper Text Markup Language", "High Text Machine Language", "Home Tool Markup Language", "Hyperlinks Text Markup Language"],
-    answer: "Hyper Text Markup Language"
-  },
-  {
-    question: "Which language is used for styling web pages?",
-    options: ["HTML", "Python", "CSS", "Java"],
-    answer: "CSS"
-  }
+const questions = [
+  { question: "What does HTML stand for?", options: ["Hyper Text Markup Language","HighText Machine Language","Hyperlinking Text Management Language","None"], correct: 0 },
+  { question: "Who invented JavaScript?", options: ["Tim Berners-Lee","Brendan Eich","James Gosling","Guido van Rossum"], correct: 1 },
+  { question: "Which property changes text color in CSS?", options: ["font-color","text-color","color","font-style"], correct: 2 },
+  { question: "React is mainly used for building?", options: ["Databases","User Interface","Servers","Networking"], correct: 1 },
+  { question: "Python is a ____ language?", options: ["Compiled","Scripting","Markup","Machine"], correct: 1 },
+   { question: "Which property changes text color in CSS?", options: ["font-color","text-color","color","font-style"], correct: 2 },
+  { question: "React is mainly used for building?", options: ["Databases","User Interface","Servers","Networking"], correct: 1 },
+   { question: "Which property changes text color in CSS?", options: ["font-color","text-color","color","font-style"], correct: 2 },
+  { question: "React is mainly used for building?", options: ["Databases","User Interface","Servers","Networking"], correct: 1 },
+   { question: "Which property changes text color in CSS?", options: ["font-color","text-color","color","font-style"], correct: 2 },
+  { question: "React is mainly used for building?", options: ["Databases","User Interface","Servers","Networking"], correct: 1 },
+   { question: "Which property changes text color in CSS?", options: ["font-color","text-color","color","font-style"], correct: 2 },
+  { question: "React is mainly used for building?", options: ["Databases","User Interface","Servers","Networking"], correct: 1 },
 ];
 
-let index = 0;
+let currentIndex = 0;
 let score = 0;
 
-const questionBox = document.getElementById("questionBox");
-const optionsBox = document.getElementById("optionsBox");
-const nextBtn = document.getElementById("nextBtn");
+const container = document.querySelector(".quiz-card"); // main container
+const questionText = document.getElementById("question-text");
+const optionsDiv = document.getElementById("options");
+const nextBtn = document.getElementById("next-btn");
+const progress = document.querySelector(".progress");
+const timerEl = document.getElementById("timer");
 
+let timeLeft = 120; // 2 minutes
+
+// ===== Load Question =====
 function loadQuestion() {
-  const current = quizData[index];
-  questionBox.textContent = current.question;
-  optionsBox.innerHTML = "";
-
-  current.options.forEach(opt => {
+  const current = questions[currentIndex];
+  questionText.textContent = current.question;
+  optionsDiv.innerHTML = "";
+  current.options.forEach((opt,i)=>{
     const btn = document.createElement("button");
     btn.textContent = opt;
-    btn.className = "list-group-item list-group-item-action";
-    btn.onclick = () => selectOption(btn, current.answer);
-    optionsBox.appendChild(btn);
+    btn.addEventListener("click", ()=> selectOption(btn,i));
+    optionsDiv.appendChild(btn);
   });
+  nextBtn.style.display = "none";
+  updateProgress();
 }
 
-function selectOption(selectedBtn, correctAnswer) {
-  const buttons = optionsBox.querySelectorAll("button");
-  buttons.forEach(btn => btn.disabled = true);
+// ===== Select Option =====
+function selectOption(btn,index){
+  const correctIndex = questions[currentIndex].correct;
+  const allBtns = optionsDiv.querySelectorAll("button");
+  allBtns.forEach(b => b.disabled = true);
 
-  if (selectedBtn.textContent === correctAnswer) {
-    selectedBtn.classList.add("list-group-item-success");
+  if(index === correctIndex){
+    btn.classList.add("correct");
     score++;
   } else {
-    selectedBtn.classList.add("list-group-item-danger");
+    btn.classList.add("wrong");
+    allBtns[correctIndex].classList.add("correct");
   }
+
+  nextBtn.style.display = "block";
 }
 
-nextBtn.onclick = () => {
-  index++;
-  if (index < quizData.length) {
+// ===== Next Button =====
+nextBtn.addEventListener("click", ()=>{
+  if(currentIndex < questions.length-1){
+    currentIndex++;
     loadQuestion();
   } else {
     showResult();
   }
-};
+});
 
-function showResult() {
-  questionBox.textContent = `Quiz Completed! 🎉`;
-  optionsBox.innerHTML = `<h4>Your Score: ${score}/${quizData.length}</h4>`;
-  nextBtn.style.display = "none";
+// ===== Update Progress =====
+function updateProgress(){
+  progress.style.width = `${((currentIndex)/questions.length)*100}%`;
 }
 
+// ===== Timer =====
+function startTimer(){
+  const interval = setInterval(()=>{
+    let minutes = Math.floor(timeLeft/60);
+    let seconds = timeLeft%60;
+    timerEl.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    timeLeft--;
+    if(timeLeft < 0){
+      clearInterval(interval);
+      showResult();
+    }
+  },1000);
+}
+
+// ===== Show Result =====
+function showResult(){
+  container.innerHTML = ""; // Clear quiz content
+
+  const resultDiv = document.createElement("div");
+  resultDiv.classList.add("result");
+
+  if(score >= 3){ // Pass condition
+    resultDiv.innerHTML = `
+      <h2>🎉 You have completed the test successfully!</h2>
+      <p>Your score: ${score} / ${questions.length}</p>
+    `;
+  } else { // Fail condition
+    resultDiv.innerHTML = `
+      <h2>😢 Better luck next time!</h2>
+      <p>Your score: ${score} / ${questions.length}</p>
+      <button id="logoutBtn">Logout</button>
+    `;
+    const logoutBtn = resultDiv.querySelector("#logoutBtn");
+    logoutBtn.addEventListener("click", ()=> location.reload());
+  }
+
+  container.appendChild(resultDiv);
+}
+
+// ===== Initialize =====
 loadQuestion();
-    
-  </script>
+startTimer();
+
+</script>
+
+</body>
 </html>
